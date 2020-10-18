@@ -21,18 +21,12 @@ pictures.forEach(el => {
 </li>`)
 })
 
-const onImgClick = function(event) {
-  event.preventDefault();
-  if (event.target.nodeName !== 'IMG') return;
-  console.log(event.target.getAttribute('data-source'))
-}
-
-
-
 const openPopUp = function (event) {
+  event.preventDefault();
   if (event.target.nodeName !== 'IMG') return;
   popUp.classList.add('is-open')
   popUpImg.src = event.target.dataset.source;
+  console.log(popUpImg.src)
 }
 const closePopUp = function () {
   popUp.classList.remove('is-open')
@@ -42,30 +36,24 @@ const closePopUp = function () {
 const pressKeyChange = function (event) {
   if (popUp.classList.contains('is-open')) {
     if (event.key === 'Escape') closePopUp();
-    if (event.key === 'ArrowLeft' || event.key === 'ArrowRight') {
+    else if (event.key === 'ArrowLeft' || event.key === 'ArrowRight') {
       let index
-      for (let i = 0; i < pictures.length; i++) {
-        if (pictures[i].original === event.target.getAttribute('href')) {
-          index = i;
+      pictures.forEach((el, idx) => { if (el.original === event.target.getAttribute('href')) index = idx})
+      if (event.key === 'ArrowLeft') {
+        if (event.target.getAttribute('href') !== pictures[0].original) {
+          popUpImg.src = pictures[index - 1].original;
+          event.target.setAttribute('href', `${popUpImg.src}`)
         }
-        }
-        if (event.key === 'ArrowLeft') {
-            if (event.target.getAttribute('href') !== pictures[0].original) {
-              popUpImg.src = pictures[index - 1].original;
-              event.target.setAttribute('href', pictures[index - 1].original)
-            }
-          } else if (event.key === 'ArrowRight') {
-
-            if (event.target.getAttribute('href') !== pictures[pictures.length - 1].original) {
-              popUpImg.src = pictures[index + 1].original;
-              event.target.setAttribute('href', `${popUpImg.src}`)
+      } else if (event.key === 'ArrowRight') {
+          if (event.target.getAttribute('href') !== pictures[pictures.length - 1].original) {
+            popUpImg.src = pictures[index + 1].original;
+            event.target.setAttribute('href', `${popUpImg.src}`)
           }
         }
       }
     }
   }
   
-gallery.addEventListener('click', onImgClick)
 gallery.addEventListener('click', openPopUp)
 popUpBtn.addEventListener('click', closePopUp)
 overlay.addEventListener('click', closePopUp)
