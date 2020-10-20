@@ -38,21 +38,27 @@ const pressKeyChange = function (event) {
     if (event.key === 'Escape') closePopUp();
     else if (event.key === 'ArrowLeft' || event.key === 'ArrowRight') {
       let index
-      pictures.forEach((el, idx) => { if (el.original === event.target.getAttribute('href')) index = idx})
+      pictures.forEach((el, idx) => { if (el.original === event.target.getAttribute('href')) index = idx })
       if (event.key === 'ArrowLeft') {
-        if (event.target.getAttribute('href') !== pictures[0].original) {
+        if (event.target.getAttribute('href') === pictures[0].original) {
+          popUpImg.src = pictures[pictures.length - 1].original;
+          event.target.setAttribute('href', `${popUpImg.src}`)
+        } else {
           popUpImg.src = pictures[index - 1].original;
           event.target.setAttribute('href', `${popUpImg.src}`)
         }
       } else if (event.key === 'ArrowRight') {
-          if (event.target.getAttribute('href') !== pictures[pictures.length - 1].original) {
-            popUpImg.src = pictures[index + 1].original;
-            event.target.setAttribute('href', `${popUpImg.src}`)
-          }
+        if (event.target.getAttribute('href') === pictures[pictures.length - 1].original) {
+          popUpImg.src = pictures[0].original;
+          event.target.setAttribute('href', `${popUpImg.src}`)
+        } else {
+          popUpImg.src = pictures[index + 1].original;
+          event.target.setAttribute('href', `${popUpImg.src}`)
         }
       }
     }
   }
+}
   
 gallery.addEventListener('click', openPopUp)
 popUpBtn.addEventListener('click', closePopUp)
